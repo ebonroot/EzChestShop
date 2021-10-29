@@ -554,7 +554,7 @@ public class MainCommands implements CommandExecutor, TabCompleter {
                     settings.isShareincome() ? 1 : 0);
             container.set(new NamespacedKey(EzChestShop.getPlugin(), "rotation"), PersistentDataType.STRING,
                     settings.getRotation());
-            EzShop.updateHologram(blockState.getLocation());
+            ShopContainer.getShop(blockState.getLocation()).updateHologramLocations().updateHologramTexts();
             ShopSettings newSettings = ShopContainer.getShopSettings(blockState.getLocation());
             newSettings.setMsgtoggle(settings.isMsgtoggle());
             newSettings.setDbuy(settings.isDbuy());
@@ -594,6 +594,7 @@ public class MainCommands implements CommandExecutor, TabCompleter {
                         container.set(new NamespacedKey(EzChestShop.getPlugin(), "dbuy"), PersistentDataType.INTEGER,
                                 settings.isDbuy() ? 1 : 0);
                         newSettings.setDbuy(settings.isDbuy());
+                        ShopContainer.getShop(blockState.getLocation()).updateHologramTexts();
                         break;
                     }
                     case "toggle-selling": {
@@ -602,6 +603,7 @@ public class MainCommands implements CommandExecutor, TabCompleter {
                         container.set(new NamespacedKey(EzChestShop.getPlugin(), "dsell"), PersistentDataType.INTEGER,
                                 settings.isDsell() ? 1 : 0);
                         newSettings.setDsell(settings.isDsell());
+                        ShopContainer.getShop(blockState.getLocation()).updateHologramTexts();
                         break;
                     }
                     case "admins": {
@@ -626,7 +628,7 @@ public class MainCommands implements CommandExecutor, TabCompleter {
                                 "rotation", "shopdata", settings.getRotation());
                         container.set(new NamespacedKey(EzChestShop.getPlugin(), "rotation"), PersistentDataType.STRING,
                                 settings.getRotation());
-                        EzShop.updateHologram(blockState.getLocation());
+                        ShopContainer.getShop(blockState.getLocation()).updateHologramLocations();
                         newSettings.setRotation(settings.getRotation());
                         break;
                     }
@@ -765,7 +767,7 @@ public class MainCommands implements CommandExecutor, TabCompleter {
                     container.set(new NamespacedKey(EzChestShop.getPlugin(), "rotation"), PersistentDataType.STRING,
                             settings.getRotation());
                     player.sendMessage(lm.rotateHologramInChat(settings.getRotation()));
-                    EzShop.updateHologram(blockState.getLocation());
+                    ShopContainer.getShop(blockState.getLocation()).updateHologramLocations();
                     break;
             }
 

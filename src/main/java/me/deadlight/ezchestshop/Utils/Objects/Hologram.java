@@ -3,6 +3,7 @@ package me.deadlight.ezchestshop.Utils.Objects;
 import me.deadlight.ezchestshop.EzChestShop;
 import me.deadlight.ezchestshop.Utils.ASHologram;
 import me.deadlight.ezchestshop.Utils.FloatingItem;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,8 @@ public class Hologram {
     public Hologram destroyLoaded() {
         for (FloatingItem item : holoItemMap) {
             item.destroy();
-            EzChestShop.logDebug("Destroyed Item");
         }
+        //holoItemMap.clear();
         return this;
     }
 
@@ -49,5 +50,26 @@ public class Hologram {
         return this;
     }
 
+    public void updateTexts(List<String> text) {
+        if (holoTextMap.size() == text.size()) {
+            int i = 0;
+            for (String txt : text) {
+                holoTextMap.get(i).setName(txt);
+                i++;
+            }
+        }
+    }
+
+    public void updateLocations(List<Location> locs) {
+        if (holoTextMap.size() == locs.size()) {
+            int i = 0;
+            for (Location loc : locs) {
+                ASHologram holo = holoTextMap.get(i);
+                holo.setLocation(loc);
+                holoTextMap.set(i, holo);
+                i++;
+            }
+        }
+    }
 
 }

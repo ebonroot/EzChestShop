@@ -24,9 +24,12 @@ public class FloatingItem {
     private int entityID;
     private Player player;
     private WrapperPlayServerEntityVelocity velocity;
+    private ItemStack item;
 
 
     public FloatingItem(Player player, ItemStack itemStack, Location location) {
+
+        this.item = itemStack;
 
         this.spawn = new WrapperPlayServerSpawnEntity();
         //this.destroy = new WrapperPlayServerEntityDestroy();
@@ -70,7 +73,7 @@ public class FloatingItem {
 
     public void destroy() {
         //this.destroy.sendPacket(player);
-        EzChestShop.logDebug("Destroying...");
+        EzChestShop.logDebug("Destroying... " + this.item.getType());
         PacketContainer destroyEntityPacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
         if (Utils.is1_17) {
             destroyEntityPacket.getIntegers().writeSafely(0, entityID);

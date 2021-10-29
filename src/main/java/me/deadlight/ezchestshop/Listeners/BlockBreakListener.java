@@ -66,7 +66,6 @@ public class BlockBreakListener implements Listener {
 
             Location loc = event.getBlock().getLocation();
             if (ShopContainer.isShop(loc)) {
-                ShopContainer.deleteShop(loc);
                 if (Utils.isShulkerBox(event.getBlock())) {
                     if (event.isDropItems()) {
                         event.setDropItems(false);
@@ -85,6 +84,7 @@ public class BlockBreakListener implements Listener {
                         }
                     }
                 }
+                ShopContainer.deleteShop(loc);
             }
         }
     }

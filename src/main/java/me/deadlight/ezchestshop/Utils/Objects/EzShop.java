@@ -161,7 +161,7 @@ public class EzShop {
             shop.getHologram(player).spawnLoaded();
         } else {
             // Show the item and the text.
-            shop.updateHologramData(player);
+            shop.updateHologramTexts(player);
             shop.getHologram(player).spawnLoaded().spawnLook();
         }
     }
@@ -184,7 +184,7 @@ public class EzShop {
         shop.addShopViewer(player.getUniqueId());
 
         // Show the hologram text
-        shop.updateHologramData(player);
+        shop.updateHologramTexts(player);
         shop.getHologram(player).spawnLook();
     }
 
@@ -239,11 +239,37 @@ public class EzShop {
         shop.getHologram(player).destroyLook();
     }
 
+    public EzShop updateHologramLocations() {
+        new ArrayList<>(this.getShopViewers()).forEach(id -> {
+            this.updateHologramLocations(Bukkit.getOfflinePlayer(id));
+        });
+        return this;
+    }
+
+    public EzShop updateHologramTexts() {
+        new ArrayList<>(this.getShopViewers()).forEach(id -> {
+            this.updateHologramTexts(Bukkit.getOfflinePlayer(id));
+        });
+        return this;
+    }
+
+
+
 
     public static void updateAllHolograms() {
         for (Location sloc : ShopContainer.getShops()) {
             EzShop.updateHologram(sloc);
         }
+    }
+
+    public void updateHologramTexts(OfflinePlayer player) {
+        this.getHologram(player).updateTexts(this.getTextsString(player.getPlayer()));
+    }
+
+
+
+    public void updateHologramLocations(OfflinePlayer player) {
+        this.getHologram(player).updateLocations(this.getTextsLocations());
     }
 
     public static void updateHologram(Location loc) {
@@ -269,6 +295,8 @@ public class EzShop {
 
     public Hologram updateHologramData(OfflinePlayer player) {
         if (player.isOnline()) {
+            holoMap.get(player).destroyLoaded().destroyLook();
+            //The bug is here due to removing the item from the holoMap and replacing it with a new version
             Hologram holo = new Hologram(getTexts(player.getPlayer()), getItems(player.getPlayer()));
             holoMap.put(player, holo);
             return holo;
@@ -310,6 +338,54 @@ public class EzShop {
             }
         }
         return holoList;
+    }
+
+    private List<String> getTextsString(Player player) {
+        List<String> texts = new ArrayList<>();
+        String itemname = Utils.getFinalItemName(getShopItem());
+        List<String> structure = new ArrayList<>(getSettings().isAdminshop() ? Config.holostructure_admin : Config.holostructure);
+        if (ShopContainer.getShopSettings(getLocation()).getRotation().equals("down")) Collections.reverse(structure);
+        List<String> possibleCounts = Utils.calculatePossibleAmount(player, getOwner(), player.getInventory().getStorageContents(),
+                Utils.getBlockInventory(getLocation().getBlock()).getStorageContents(), getBuyPrice(), getSellPrice(), getShopItem());
+        for (String element : structure) {
+            if (element.equalsIgnoreCase("[Item]")) continue;
+                String line = Utils.colorify(element.replace("%item%", itemname).replace("%buy%", Utils.formatNumber(getBuyPrice(), Utils.FormatType.HOLOGRAM)).
+                        replace("%sell%", Utils.formatNumber(getSellPrice(), Utils.FormatType.HOLOGRAM)).replace("%currency%", Config.currency)
+                        .replace("%owner%", getOwner().getName()).replace("%maxbuy%", possibleCounts.get(0)).replace("%maxsell%", possibleCounts.get(1)));
+                if (getSettings().isDbuy() || getSettings().isDsell()) {
+                    line = line.replaceAll("<separator>.*?<\\/separator>", "");
+                    if (getSettings().isDbuy() && getSettings().isDsell()) {
+                        line = lm.disabledButtonTitle();
+                    } else if (getSettings().isDbuy()) {
+                        line = line.replaceAll("<buy>.*?<\\/buy>", "").replaceAll("<sell>|<\\/sell>", "");
+                    } else if (getSettings().isDsell()) {
+                        line = line.replaceAll("<sell>.*?<\\/sell>", "").replaceAll("<buy>|<\\/buy>", "");
+                    }
+                } else {
+                    line = line.replaceAll("<separator>|<\\/separator>", "").replaceAll("<buy>|<\\/buy>", "").replaceAll("<sell>|<\\/sell>", "");
+                }
+                texts.add(line);
+
+        }
+        return texts;
+    }
+
+    private List<Location> getTextsLocations() {
+        Location lineLocation = getHoloLoc(getLocation().getBlock()).clone().subtract(0, 0.1, 0);
+        List<Location> locs = new ArrayList<>();
+        List<String> structure = new ArrayList<>(getSettings().isAdminshop() ? Config.holostructure_admin : Config.holostructure);
+        if (ShopContainer.getShopSettings(getLocation()).getRotation().equals("down")) Collections.reverse(structure);
+        for (String element : structure) {
+            if (element.equalsIgnoreCase("[Item]")) {
+                lineLocation.add(0, 0.15 * Config.holo_linespacing, 0);
+                lineLocation.add(0, 0.35 * Config.holo_linespacing, 0);
+                continue;
+            }
+            locs.add(lineLocation.clone() );
+            lineLocation.add(0, 0.3 * Config.holo_linespacing, 0);
+
+        }
+        return locs;
     }
 
     private List<FloatingItem> getItems(Player player) {

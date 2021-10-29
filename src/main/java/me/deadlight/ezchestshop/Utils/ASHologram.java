@@ -87,12 +87,12 @@ public class ASHologram {
     }
 
     public void setName(String name) {
-        this.name = name;
         WrappedChatComponent nick = WrappedChatComponent.fromText(ChatColor.translateAlternateColorCodes('&', name));
         this.name = name;
         this.meta.getMetadata().get(3).setValue(Optional.of(nick.getHandle()));
         meta.sendPacket(handler);
     }
+
     public void destroy() {
         PacketContainer destroyEntityPacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
         if (Utils.is1_17) {
