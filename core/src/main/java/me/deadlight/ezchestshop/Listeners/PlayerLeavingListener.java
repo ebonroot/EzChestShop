@@ -6,13 +6,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerLeavingListener implements Listener {
 
-
-    @EventHandler
-    public void onLeave(PlayerQuitEvent event) {
-        if (ChatListener.chatmap.containsKey(event.getPlayer().getUniqueId())) {
-            ChatListener.chatmap.remove(event.getPlayer().getUniqueId());
-        }
+  @EventHandler
+  public void onLeave(PlayerQuitEvent event) {
+    if (ChatListener.chatmap.containsKey(event.getPlayer().getUniqueId())) {
+      ChatListener.chatmap.remove(event.getPlayer().getUniqueId());
     }
-
-
+  }
 }

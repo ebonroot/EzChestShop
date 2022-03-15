@@ -22,46 +22,46 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 
 public class WrapperPlayServerEntityDestroy extends AbstractPacket {
-    public static final PacketType TYPE = PacketType.Play.Server.ENTITY_DESTROY;
 
-    public WrapperPlayServerEntityDestroy() {
-        super(new PacketContainer(TYPE), TYPE);
-        handle.getModifier().writeDefaults();
-    }
+  public static final PacketType TYPE = PacketType.Play.Server.ENTITY_DESTROY;
 
-    public WrapperPlayServerEntityDestroy(PacketContainer packet) {
-        super(packet, TYPE);
-    }
+  public WrapperPlayServerEntityDestroy() {
+    super(new PacketContainer(TYPE), TYPE);
+    handle.getModifier().writeDefaults();
+  }
 
-    /**
-     * Retrieve Count.
-     * <p>
-     * Notes: length of following array
-     *
-     * @return The current Count
-     */
-    public int getCount() {
-        return handle.getIntegerArrays().read(0).length;
-    }
+  public WrapperPlayServerEntityDestroy(PacketContainer packet) {
+    super(packet, TYPE);
+  }
 
-    /**
-     * Retrieve Entity IDs.
-     * <p>
-     * Notes: the list of entities of destroy
-     *
-     * @return The current Entity IDs
-     */
-    public int[] getEntityIDs() {
-        return handle.getIntegerArrays().read(0);
-    }
+  /**
+   * Retrieve Count.
+   * <p>
+   * Notes: length of following array
+   *
+   * @return The current Count
+   */
+  public int getCount() {
+    return handle.getIntegerArrays().read(0).length;
+  }
 
-    /**
-     * Set Entity IDs.
-     *
-     * @param value - new value.
-     */
-    public void setEntityIds(int[] value) {
-        handle.getIntegerArrays().write(0, value);
-    }
+  /**
+   * Retrieve Entity IDs.
+   * <p>
+   * Notes: the list of entities of destroy
+   *
+   * @return The current Entity IDs
+   */
+  public int[] getEntityIDs() {
+    return handle.getIntegerArrays().read(0);
+  }
 
+  /**
+   * Set Entity IDs.
+   *
+   * @param value - new value.
+   */
+  public void setEntityIds(int[] value) {
+    handle.getIntegerArrays().write(0, value);
+  }
 }

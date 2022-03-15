@@ -15,26 +15,32 @@ import org.bukkit.entity.Player;
 
 public class WorldGuardUtils {
 
-    public static Location convertLocation(org.bukkit.Location loc) {
-        return BukkitAdapter.adapt(loc);
-    }
+  public static Location convertLocation(org.bukkit.Location loc) {
+    return BukkitAdapter.adapt(loc);
+  }
 
-    public static World convertWorld(org.bukkit.World world) {
-        return BukkitAdapter.adapt(world);
-    }
+  public static World convertWorld(org.bukkit.World world) {
+    return BukkitAdapter.adapt(world);
+  }
 
-    public static ApplicableRegionSet queryRegionSet(org.bukkit.Location loc) {
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionQuery query = container.createQuery();
-        return  ((RegionQuery) query).getApplicableRegions(convertLocation(loc));
-    }
+  public static ApplicableRegionSet queryRegionSet(org.bukkit.Location loc) {
+    RegionContainer container = WorldGuard
+      .getInstance()
+      .getPlatform()
+      .getRegionContainer();
+    RegionQuery query = container.createQuery();
+    return ((RegionQuery) query).getApplicableRegions(convertLocation(loc));
+  }
 
-    public static boolean queryStateFlag(StateFlag flag, Player player) {
-        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-        return queryRegionSet(player.getLocation()).testState(localPlayer, flag);
-    }
+  public static boolean queryStateFlag(StateFlag flag, Player player) {
+    LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
+    return queryRegionSet(player.getLocation()).testState(localPlayer, flag);
+  }
 
-    public static boolean queryStateFlag(StateFlag flag, org.bukkit.Location location) {
-        return queryRegionSet(location).testState(null, flag);
-    }
+  public static boolean queryStateFlag(
+    StateFlag flag,
+    org.bukkit.Location location
+  ) {
+    return queryRegionSet(location).testState(null, flag);
+  }
 }

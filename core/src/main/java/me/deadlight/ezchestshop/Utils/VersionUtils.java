@@ -5,12 +5,11 @@ import org.bukkit.inventory.ItemStack;
 
 abstract class VersionUtils {
 
-    abstract String ItemToTextCompoundString(ItemStack itemStack);
+  abstract String ItemToTextCompoundString(ItemStack itemStack);
 
-    abstract int getItemIndex();
+  abstract int getItemIndex();
 
-    abstract int getArmorStandIndex();
+  abstract int getArmorStandIndex();
 
-    abstract void destroyEntity(Player player, int entityID);
-
+  abstract void destroyEntity(Player player, int entityID);
 }
